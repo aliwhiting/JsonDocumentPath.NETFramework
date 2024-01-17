@@ -2,6 +2,19 @@
 
   <PropertyGroup>
 	<TargetFramework>netstandard2.0</TargetFramework>
+	<PackageVersion>1.0.0</PackageVersion>
+	<AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<FileVersion>1.0.0.0</FileVersion>
+	<Authors>Adanies Zambrano, Alastair Whiting</Authors>
+	<Product>JsonDocumentPath.NETFramework</Product>
+	<Description>JsonDocumentPath.NETFramework is a class library to extract values from JSON with single line expressions</Description>
+	<Copyright>Copyright © Alastair Whiting 2024</Copyright>
+	<Summary>JsonDocumentPath.NETFramework is a class library to extract values from JSON (JsonDocument) with single line expressions. The code is a fork of JsonDocumentPath re-targeted to .NET Standard 2.0</Summary>
+	<NeutralLanguage>en-US</NeutralLanguage>
+	<Title>JsonDocumentPath.NETFramework</Title>
+	<PackageTags>JsonDocumentPath.NETFramework, Json, JsonDocument, JsonPath, .NET Standard 2.0</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<RepositoryUrl>https://github.com/aliwhiting/JsonDocumentPath.NETFramework</RepositoryUrl>
 	<Nullable>enable</Nullable>
 	<LangVersion>8.0</LangVersion>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
