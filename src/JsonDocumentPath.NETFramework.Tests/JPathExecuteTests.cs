@@ -30,17 +30,17 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void GreaterThanWithIntegerParameterAndStringValue()
         {
             string json = @"{
-  ""persons"": [
-    {
-      ""name""  : ""John"",
-      ""age"": ""26""
-    },
-    {
-      ""name""  : ""Jane"",
-      ""age"": ""2""
-    }
-  ]
-}";
+              ""persons"": [
+                {
+                  ""name""  : ""John"",
+                  ""age"": ""26""
+                },
+                {
+                  ""name""  : ""Jane"",
+                  ""age"": ""2""
+                }
+              ]
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
 
@@ -53,17 +53,17 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void GreaterThanWithStringParameterAndIntegerValue()
         {
             string json = @"{
-          ""persons"": [
-            {
-              ""name""  : ""John"",
-              ""age"": 26
-            },
-            {
-              ""name""  : ""Jane"",
-              ""age"": 2
-            }
-          ]
-        }";
+              ""persons"": [
+                {
+                  ""name""  : ""John"",
+                  ""age"": 26
+                },
+                {
+                  ""name""  : ""Jane"",
+                  ""age"": 2
+                }
+              ]
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
 
@@ -112,32 +112,32 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void ScanFilter()
         {
             string json = @"{
-          ""elements"": [
-            {
-              ""id"": ""A"",
-              ""children"": [
+              ""elements"": [
                 {
-                  ""id"": ""AA"",
+                  ""id"": ""A"",
                   ""children"": [
                     {
-                      ""id"": ""AAA""
+                      ""id"": ""AA"",
+                      ""children"": [
+                        {
+                          ""id"": ""AAA""
+                        },
+                        {
+                          ""id"": ""AAB""
+                        }
+                      ]
                     },
                     {
-                      ""id"": ""AAB""
+                      ""id"": ""AB""
                     }
                   ]
                 },
                 {
-                  ""id"": ""AB""
+                  ""id"": ""B"",
+                  ""children"": []
                 }
               ]
-            },
-            {
-              ""id"": ""B"",
-              ""children"": []
-            }
-          ]
-        }";
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
             var results = models.SelectElements("$.elements..[?(@.id=='AAA')]").ToList();
@@ -189,32 +189,32 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void ScanFilterTrue()
         {
             string json = @"{
-                  ""elements"": [
+              ""elements"": [
+                {
+                  ""id"": ""A"",
+                  ""children"": [
                     {
-                      ""id"": ""A"",
+                      ""id"": ""AA"",
                       ""children"": [
                         {
-                          ""id"": ""AA"",
-                          ""children"": [
-                            {
-                              ""id"": ""AAA""
-                            },
-                            {
-                              ""id"": ""AAB""
-                            }
-                          ]
+                          ""id"": ""AAA""
                         },
                         {
-                          ""id"": ""AB""
+                          ""id"": ""AAB""
                         }
                       ]
                     },
                     {
-                      ""id"": ""B"",
-                      ""children"": []
+                      ""id"": ""AB""
                     }
                   ]
-                }";
+                },
+                {
+                  ""id"": ""B"",
+                  ""children"": []
+                }
+              ]
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
 
@@ -227,32 +227,32 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void ScanFilterDeepTrue()
         {
             string json = @"{
-                  ""elements"": [
+              ""elements"": [
+                {
+                  ""id"": ""A"",
+                  ""children"": [
                     {
-                      ""id"": ""A"",
+                      ""id"": ""AA"",
                       ""children"": [
                         {
-                          ""id"": ""AA"",
-                          ""children"": [
-                            {
-                              ""id"": ""AAA""
-                            },
-                            {
-                              ""id"": ""AAB""
-                            }
-                          ]
+                          ""id"": ""AAA""
                         },
                         {
-                          ""id"": ""AB""
+                          ""id"": ""AAB""
                         }
                       ]
                     },
                     {
-                      ""id"": ""B"",
-                      ""children"": []
+                      ""id"": ""AB""
                     }
                   ]
-                }";
+                },
+                {
+                  ""id"": ""B"",
+                  ""children"": []
+                }
+              ]
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
             var results = models.SelectElements("$.elements..[?(@.id=='AA')]").ToList();
@@ -264,28 +264,28 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void ScanQuoted()
         {
             string json = @"{
-                    ""Node1"": {
-                        ""Child1"": {
-                            ""Name"": ""IsMe"",
-                            ""TargetNode"": {
-                                ""Prop1"": ""Val1"",
-                                ""Prop2"": ""Val2""
-                            }
-                        },
-                        ""My.Child.Node"": {
-                            ""TargetNode"": {
-                                ""Prop1"": ""Val1"",
-                                ""Prop2"": ""Val2""
-                            }
+                ""Node1"": {
+                    ""Child1"": {
+                        ""Name"": ""IsMe"",
+                        ""TargetNode"": {
+                            ""Prop1"": ""Val1"",
+                            ""Prop2"": ""Val2""
                         }
                     },
-                    ""Node2"": {
+                    ""My.Child.Node"": {
                         ""TargetNode"": {
                             ""Prop1"": ""Val1"",
                             ""Prop2"": ""Val2""
                         }
                     }
-                }";
+                },
+                ""Node2"": {
+                    ""TargetNode"": {
+                        ""Prop1"": ""Val1"",
+                        ""Prop2"": ""Val2""
+                    }
+                }
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
 
@@ -300,28 +300,28 @@ namespace JsonDocumentPath.NETFramework.Tests
         public void ScanMultipleQuoted()
         {
             string json = @"{
-                    ""Node1"": {
-                        ""Child1"": {
-                            ""Name"": ""IsMe"",
-                            ""TargetNode"": {
-                                ""Prop1"": ""Val1"",
-                                ""Prop2"": ""Val2""
-                            }
-                        },
-                        ""My.Child.Node"": {
-                            ""TargetNode"": {
-                                ""Prop1"": ""Val3"",
-                                ""Prop2"": ""Val4""
-                            }
+                ""Node1"": {
+                    ""Child1"": {
+                        ""Name"": ""IsMe"",
+                        ""TargetNode"": {
+                            ""Prop1"": ""Val1"",
+                            ""Prop2"": ""Val2""
                         }
                     },
-                    ""Node2"": {
+                    ""My.Child.Node"": {
                         ""TargetNode"": {
-                            ""Prop1"": ""Val5"",
-                            ""Prop2"": ""Val6""
+                            ""Prop1"": ""Val3"",
+                            ""Prop2"": ""Val4""
                         }
                     }
-                }";
+                },
+                ""Node2"": {
+                    ""TargetNode"": {
+                        ""Prop1"": ""Val5"",
+                        ""Prop2"": ""Val6""
+                    }
+                }
+            }";
 
             var models = JsonDocument.Parse(json).RootElement;
 

@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonDocumentPath.NETFramework.Filters
 {
     internal class ArraySliceFilter : PathFilter
     {

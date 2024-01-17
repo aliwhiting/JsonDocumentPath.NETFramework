@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace System.Text.Json
 {
@@ -221,7 +223,7 @@ namespace System.Text.Json
             }
             if (objA.ValueKind == JsonValueKind.String && objB.ValueKind == JsonValueKind.String)
             {
-                return objA.GetString().CompareTo(objB.GetString());
+                return string.Compare(objA.GetString(), objB.GetString(), StringComparison.Ordinal);
             }
             //When objA is a number and objB is not.
             if (objA.ValueKind == JsonValueKind.Number)
@@ -229,7 +231,7 @@ namespace System.Text.Json
                 var valueObjA = objA.GetDouble();
                 if (objB.ValueKind == JsonValueKind.String)
                 {
-                    if (double.TryParse(objB.GetRawText().AsSpan().TrimStart('"').TrimEnd('"'), out double queryValueTyped))
+                    if (double.TryParse(objB.GetRawText().AsSpan().TrimStart('"').TrimEnd('"').ToString(), out double queryValueTyped))
                     {
                         return valueObjA.CompareTo(queryValueTyped);
                     }
@@ -240,7 +242,7 @@ namespace System.Text.Json
             {
                 if (objB.ValueKind == JsonValueKind.Number)
                 {
-                    if (double.TryParse(objA.GetRawText().AsSpan().TrimStart('"').TrimEnd('"'), out double valueTyped))
+                    if (double.TryParse(objA.GetRawText().AsSpan().TrimStart('"').TrimEnd('"').ToString(), out double valueTyped))
                     {
                         return valueTyped.CompareTo(objB.GetDouble());
                     }
