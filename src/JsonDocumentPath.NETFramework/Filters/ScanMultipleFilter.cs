@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonDocumentPath.NETFramework.Filters
 {
     internal class ScanMultipleFilter : PathFilter
     {

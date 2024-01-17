@@ -1,34 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using Xunit;
+using JsonDocumentPath.NETFramework.Tests.Asserts;
 
-namespace JDocument.Test
+namespace JsonDocumentPath.NETFramework.Tests
 {
+    [TestClass]
     public class JPathExecuteTests
     {
-        [Fact]
+        [TestMethod]
         public void GreaterThanIssue1518()
         {
             string statusJson = @"{""usingmem"": ""214376""}";//214,376
             var jObj = JsonDocument.Parse(statusJson).RootElement;
 
             var aa = jObj.SelectElement("$..[?(@.usingmem>10)]");//found,10
-            Assert.Equal(jObj, aa);
+            Assert.AreEqual(jObj, aa);
 
             var bb = jObj.SelectElement("$..[?(@.usingmem>27000)]");//null, 27,000
-            Assert.Equal(jObj, bb);
+            Assert.AreEqual(jObj, bb);
 
             var cc = jObj.SelectElement("$..[?(@.usingmem>21437)]");//found, 21,437
-            Assert.Equal(jObj, cc);
+            Assert.AreEqual(jObj, cc);
 
             var dd = jObj.SelectElement("$..[?(@.usingmem>21438)]");//null,21,438
-            Assert.Equal(jObj, dd);
+            Assert.AreEqual(jObj, dd);
         }
 
-        [Fact]
+        [TestMethod]
         public void GreaterThanWithIntegerParameterAndStringValue()
         {
             string json = @"{
@@ -48,10 +46,10 @@ namespace JDocument.Test
 
             var results = models.SelectElements("$.persons[?(@.age > 3)]").ToList();
 
-            Assert.Equal(1, results.Count);
+            Assert.AreEqual(1, results.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void GreaterThanWithStringParameterAndIntegerValue()
         {
             string json = @"{
@@ -71,10 +69,10 @@ namespace JDocument.Test
 
             var results = models.SelectElements("$.persons[?(@.age > '3')]").ToList();
 
-            Assert.Equal(1, results.Count);
+            Assert.AreEqual(1, results.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void RecursiveWildcard()
         {
             string json = @"{
@@ -104,13 +102,13 @@ namespace JDocument.Test
             var models = JsonDocument.Parse(json).RootElement;
             var results = models.SelectElements("$.b..*.id").ToList();
 
-            Assert.Equal(3, results.Count);
-            Assert.Equal(2, results[0].Value.GetInt32());
-            Assert.Equal(3, results[1].Value.GetInt32());
-            Assert.Equal(4, results[2].Value.GetInt32());
+            Assert.AreEqual(3, results.Count);
+            Assert.AreEqual(2, results[0].Value.GetInt32());
+            Assert.AreEqual(3, results[1].Value.GetInt32());
+            Assert.AreEqual(4, results[2].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void ScanFilter()
         {
             string json = @"{
@@ -143,11 +141,11 @@ namespace JDocument.Test
 
             var models = JsonDocument.Parse(json).RootElement;
             var results = models.SelectElements("$.elements..[?(@.id=='AAA')]").ToList();
-            Assert.Equal(1, results.Count);
-            Assert.Equal(models.GetProperty("elements")[0].GetProperty("children")[0].GetProperty("children")[0], results[0]);
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(models.GetProperty("elements")[0].GetProperty("children")[0].GetProperty("children")[0], results[0]);
         }
 
-        [Fact]
+        [TestMethod]
         public void FilterTrue()
         {
             string json = @"{
@@ -182,12 +180,12 @@ namespace JDocument.Test
 
             var results = models.SelectElements("$.elements[?(true)]").ToList();
 
-            Assert.Equal(2, results.Count);
-            Assert.Equal(results[0], models.GetProperty("elements")[0]);
-            Assert.Equal(results[1], models.GetProperty("elements")[1]);
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(results[0], models.GetProperty("elements")[0]);
+            Assert.AreEqual(results[1], models.GetProperty("elements")[1]);
         }
 
-        [Fact]
+        [TestMethod]
         public void ScanFilterTrue()
         {
             string json = @"{
@@ -222,10 +220,10 @@ namespace JDocument.Test
 
             var results = models.SelectElements("$.elements..[?(true)]").ToList();
 
-            Assert.Equal(25, results.Count);
+            Assert.AreEqual(25, results.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void ScanFilterDeepTrue()
         {
             string json = @"{
@@ -259,10 +257,10 @@ namespace JDocument.Test
             var models = JsonDocument.Parse(json).RootElement;
             var results = models.SelectElements("$.elements..[?(@.id=='AA')]").ToList();
 
-            Assert.Single(results);
+            Assert.AreEqual(1, results.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void ScanQuoted()
         {
             string json = @"{
@@ -292,13 +290,13 @@ namespace JDocument.Test
             var models = JsonDocument.Parse(json).RootElement;
 
             int result = models.SelectElements("$..['My.Child.Node']").Count();
-            Assert.Equal(1, result);
+            Assert.AreEqual(1, result);
 
             result = models.SelectElements("..['My.Child.Node']").Count();
-            Assert.Equal(1, result);
+            Assert.AreEqual(1, result);
         }
 
-        [Fact]
+        [TestMethod]
         public void ScanMultipleQuoted()
         {
             string json = @"{
@@ -328,16 +326,16 @@ namespace JDocument.Test
             var models = JsonDocument.Parse(json).RootElement;
 
             var results = models.SelectElements("$..['My.Child.Node','Prop1','Prop2']").ToList();
-            Assert.Equal("Val1", results[0].Value.GetString());
-            Assert.Equal("Val2", results[1].Value.GetString());
-            Assert.Equal(JsonValueKind.Object, results[2].Value.ValueKind);
-            Assert.Equal("Val3", results[3].Value.GetString());
-            Assert.Equal("Val4", results[4].Value.GetString());
-            Assert.Equal("Val5", results[5].Value.GetString());
-            Assert.Equal("Val6", results[6].Value.GetString());
+            Assert.AreEqual("Val1", results[0].Value.GetString());
+            Assert.AreEqual("Val2", results[1].Value.GetString());
+            Assert.AreEqual(JsonValueKind.Object, results[2].Value.ValueKind);
+            Assert.AreEqual("Val3", results[3].Value.GetString());
+            Assert.AreEqual("Val4", results[4].Value.GetString());
+            Assert.AreEqual("Val5", results[5].Value.GetString());
+            Assert.AreEqual("Val6", results[6].Value.GetString());
         }
 
-        [Fact]
+        [TestMethod]
         public void ParseWithEmptyArrayContent()
         {
             var json = @"{
@@ -377,13 +375,13 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
             var elements = document.SelectElements("$..en-US").ToList();
 
-            Assert.Equal(3, elements.Count);
-            Assert.Equal("Add", elements[0].Value.GetString());
-            Assert.Equal("Sort by", elements[1].Value.GetString());
-            Assert.Equal("Name", elements[2].Value.GetString());
+            Assert.AreEqual(3, elements.Count);
+            Assert.AreEqual("Add", elements[0].Value.GetString());
+            Assert.AreEqual("Sort by", elements[1].Value.GetString());
+            Assert.AreEqual("Name", elements[2].Value.GetString());
         }
 
-        [Fact]
+        [TestMethod]
         public void SelectElementAfterEmptyContainer()
         {
             string json = @"{
@@ -395,22 +393,22 @@ namespace JDocument.Test
 
             var results = document.SelectElements("$..test").ToList();
 
-            Assert.Equal(1, results.Count);
-            Assert.Equal("no one will find me", results[0].Value.GetString());
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual("no one will find me", results[0].Value.GetString());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluatePropertyWithRequired()
         {
             string json = "{\"bookId\":\"1000\"}";
             var document = JsonDocument.Parse(json).RootElement;
 
-            string bookId = (string)document.SelectElement("bookId", true).Value.GetString();
+            string bookId = (string)document.SelectElement("bookId", true)?.GetString();
 
-            Assert.Equal("1000", bookId);
+            Assert.AreEqual("1000", bookId);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateEmptyPropertyIndexer()
         {
             string json = @"{
@@ -420,10 +418,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("['']");
-            Assert.Equal(1, t.Value.GetInt32());
+            Assert.AreEqual(1, t.Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateEmptyString()
         {
             string json = @"{
@@ -431,13 +429,13 @@ namespace JDocument.Test
                 }";
             var document = JsonDocument.Parse(json).RootElement;
             var t = document.SelectElement("");
-            Assert.Equal(document, t);
+            Assert.AreEqual(document, t);
 
             t = document.SelectElement("['']");
-            Assert.Equal(null, t);
+            Assert.AreEqual(null, t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateEmptyStringWithMatchingEmptyProperty()
         {
             string json = @"{
@@ -446,10 +444,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("[' ']");
-            Assert.Equal(1, t.Value.GetInt32());
+            Assert.AreEqual(1, t.Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateWhitespaceString()
         {
             string json = @"{
@@ -458,10 +456,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement(" ");
-            Assert.Equal(document, t);
+            Assert.AreEqual(document, t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateDollarString()
         {
             string json = @"{
@@ -470,10 +468,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("$");
-            Assert.Equal(document, t);
+            Assert.AreEqual(document, t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateDollarTypeString()
         {
             string json = @"{
@@ -482,10 +480,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("$values[1]");
-            Assert.Equal(2, t.Value.GetInt32());
+            Assert.AreEqual(2, t.Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateSingleProperty()
         {
             string json = @"{
@@ -494,12 +492,12 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("Blah");
-            Assert.NotNull(t);
-            Assert.Equal(JsonValueKind.Number, t.Value.ValueKind);
-            Assert.Equal(1, t.Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(JsonValueKind.Number, t.Value.ValueKind);
+            Assert.AreEqual(1, t.Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateWildcardProperty()
         {
             string json = @"{
@@ -509,13 +507,13 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElements("$.*").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(2, t.Count);
-            Assert.Equal(1, t[0].Value.GetInt32());
-            Assert.Equal(2, t[1].Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(2, t.Count);
+            Assert.AreEqual(1, t[0].Value.GetInt32());
+            Assert.AreEqual(2, t[1].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void QuoteName()
         {
             string json = @"{
@@ -524,12 +522,12 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("['Blah']");
-            Assert.NotNull(t);
-            Assert.Equal(JsonValueKind.Number, t.Value.ValueKind);
-            Assert.Equal(1, t.Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(JsonValueKind.Number, t.Value.ValueKind);
+            Assert.AreEqual(1, t.Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateMissingProperty()
         {
             string json = @"{
@@ -538,10 +536,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("Missing[1]");
-            Assert.Null(t);
+            Assert.IsNull(t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateIndexerOnObject()
         {
             string json = @"{
@@ -550,10 +548,10 @@ namespace JDocument.Test
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("[1]");
-            Assert.Null(t);
+            Assert.IsNull(t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateIndexerOnObjectWithError()
         {
             string json = @"{
@@ -564,7 +562,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("[1]", true); }, @"Index 1 not valid on JsonElement.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateWildcardIndexOnObjectWithError()
         {
             string json = @"{
@@ -575,7 +573,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("[*]", true); }, @"Index * not valid on JsonElement.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateSliceOnObjectWithError()
         {
             string json = @"{
@@ -586,17 +584,17 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("[:]", true); }, @"Array slice is not valid on JsonElement.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluatePropertyOnArray()
         {
             string json = @"[1,2,3,4,5]";
             var document = JsonDocument.Parse(json).RootElement;
 
             var t = document.SelectElement("BlahBlah");
-            Assert.Null(t);
+            Assert.IsNull(t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateMultipleResultsError()
         {
             string json = @"[1,2,3,4,5]";
@@ -604,7 +602,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("[0, 1]"); }, @"Path returned multiple tokens.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluatePropertyOnArrayWithError()
         {
             string json = @"[1,2,3,4,5]";
@@ -613,7 +611,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("BlahBlah", true); }, @"Property 'BlahBlah' not valid on JsonElement.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateNoResultsWithMultipleArrayIndexes()
         {
             string json = @"[1,2,3,4,5]";
@@ -622,7 +620,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("[9,10]", true); }, @"Index 9 outside the bounds of JArray.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateMissingPropertyWithError()
         {
             string json = @"{
@@ -633,7 +631,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("Missing", true); }, "Property 'Missing' does not exist on JsonElement.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluatePropertyWithoutError()
         {
             string json = @"{
@@ -641,11 +639,11 @@ namespace JDocument.Test
                 }";
             var document = JsonDocument.Parse(json).RootElement;
 
-            var v = document.SelectElement("Blah", true).Value.GetInt32();
-            Assert.Equal(1, v);
+            var v = document.SelectElement("Blah", true)?.GetInt32();
+            Assert.AreEqual(1, v);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateMissingPropertyIndexWithError()
         {
             string json = @"{
@@ -656,7 +654,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { document.SelectElement("['Missing','Missing2']", true); }, "Property 'Missing' does not exist on JObject.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateMultiPropertyIndexOnArrayWithError()
         {
             var a = JsonDocument.Parse("[1,2,3,4,5]").RootElement;
@@ -664,7 +662,7 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { a.SelectElement("['Missing','Missing2']", true); }, "Properties 'Missing', 'Missing2' not valid on JsonElement.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateArraySliceWithError()
         {
             var a = JsonDocument.Parse("[1,2,3,4,5]").RootElement;
@@ -680,16 +678,16 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { a.SelectElement("[:]", true); }, "Array slice of * to * returned no results.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateOutOfBoundsIndxer()
         {
             var a = JsonDocument.Parse("[1,2,3,4,5]").RootElement;
 
             var t = a.SelectElement("[1000].Ha");
-            Assert.Null(t);
+            Assert.IsNull(t);
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateArrayOutOfBoundsIndxerWithError()
         {
             var a = JsonDocument.Parse("[1,2,3,4,5]").RootElement;
@@ -697,93 +695,93 @@ namespace JDocument.Test
             ExceptionAssert.Throws<JsonException>(() => { a.SelectElement("[1000].Ha", true); }, "Index 1000 outside the bounds of JArray.");
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateArray()
         {
             var a = JsonDocument.Parse("[1,2,3,4]").RootElement;
 
             var t = a.SelectElement("[1]");
-            Assert.NotNull(t);
-            Assert.Equal(JsonValueKind.Number, t.Value.ValueKind);
-            Assert.Equal(2, t.Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(JsonValueKind.Number, t.Value.ValueKind);
+            Assert.AreEqual(2, t.Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateArraySlice()
         {
             var a = JsonDocument.Parse(@"[1, 2, 3, 4, 5, 6, 7, 8, 9]").RootElement;
             List<JsonElement?> t = null;
 
             t = a.SelectElements("[-3:]").ToList();
-            Assert.Equal(3, t.Count);
-            Assert.Equal(7, t[0].Value.GetInt32());
-            Assert.Equal(8, t[1].Value.GetInt32());
-            Assert.Equal(9, t[2].Value.GetInt32());
+            Assert.AreEqual(3, t.Count);
+            Assert.AreEqual(7, t[0].Value.GetInt32());
+            Assert.AreEqual(8, t[1].Value.GetInt32());
+            Assert.AreEqual(9, t[2].Value.GetInt32());
 
             t = a.SelectElements("[-1:-2:-1]").ToList();
-            Assert.Equal(1, t.Count);
-            Assert.Equal(9, t[0].Value.GetInt32());
+            Assert.AreEqual(1, t.Count);
+            Assert.AreEqual(9, t[0].Value.GetInt32());
 
             t = a.SelectElements("[-2:-1]").ToList();
-            Assert.Equal(1, t.Count);
-            Assert.Equal(8, t[0].Value.GetInt32());
+            Assert.AreEqual(1, t.Count);
+            Assert.AreEqual(8, t[0].Value.GetInt32());
 
             t = a.SelectElements("[1:1]").ToList();
-            Assert.Equal(0, t.Count);
+            Assert.AreEqual(0, t.Count);
 
             t = a.SelectElements("[1:2]").ToList();
-            Assert.Equal(1, t.Count);
-            Assert.Equal(2, t[0].Value.GetInt32());
+            Assert.AreEqual(1, t.Count);
+            Assert.AreEqual(2, t[0].Value.GetInt32());
 
             t = a.SelectElements("[::-1]").ToList();
-            Assert.Equal(9, t.Count);
-            Assert.Equal(9, t[0].Value.GetInt32());
-            Assert.Equal(8, t[1].Value.GetInt32());
-            Assert.Equal(7, t[2].Value.GetInt32());
-            Assert.Equal(6, t[3].Value.GetInt32());
-            Assert.Equal(5, t[4].Value.GetInt32());
-            Assert.Equal(4, t[5].Value.GetInt32());
-            Assert.Equal(3, t[6].Value.GetInt32());
-            Assert.Equal(2, t[7].Value.GetInt32());
-            Assert.Equal(1, t[8].Value.GetInt32());
+            Assert.AreEqual(9, t.Count);
+            Assert.AreEqual(9, t[0].Value.GetInt32());
+            Assert.AreEqual(8, t[1].Value.GetInt32());
+            Assert.AreEqual(7, t[2].Value.GetInt32());
+            Assert.AreEqual(6, t[3].Value.GetInt32());
+            Assert.AreEqual(5, t[4].Value.GetInt32());
+            Assert.AreEqual(4, t[5].Value.GetInt32());
+            Assert.AreEqual(3, t[6].Value.GetInt32());
+            Assert.AreEqual(2, t[7].Value.GetInt32());
+            Assert.AreEqual(1, t[8].Value.GetInt32());
 
             t = a.SelectElements("[::-2]").ToList();
-            Assert.Equal(5, t.Count);
-            Assert.Equal(9, t[0].Value.GetInt32());
-            Assert.Equal(7, t[1].Value.GetInt32());
-            Assert.Equal(5, t[2].Value.GetInt32());
-            Assert.Equal(3, t[3].Value.GetInt32());
-            Assert.Equal(1, t[4].Value.GetInt32());
+            Assert.AreEqual(5, t.Count);
+            Assert.AreEqual(9, t[0].Value.GetInt32());
+            Assert.AreEqual(7, t[1].Value.GetInt32());
+            Assert.AreEqual(5, t[2].Value.GetInt32());
+            Assert.AreEqual(3, t[3].Value.GetInt32());
+            Assert.AreEqual(1, t[4].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateWildcardArray()
         {
             var a = JsonDocument.Parse(@"[1, 2, 3, 4]").RootElement;
 
             List<JsonElement?> t = a.SelectElements("[*]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(4, t.Count);
-            Assert.Equal(1, t[0].Value.GetInt32());
-            Assert.Equal(2, t[1].Value.GetInt32());
-            Assert.Equal(3, t[2].Value.GetInt32());
-            Assert.Equal(4, t[3].Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(4, t.Count);
+            Assert.AreEqual(1, t[0].Value.GetInt32());
+            Assert.AreEqual(2, t[1].Value.GetInt32());
+            Assert.AreEqual(3, t[2].Value.GetInt32());
+            Assert.AreEqual(4, t[3].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateArrayMultipleIndexes()
         {
             var a = JsonDocument.Parse(@"[1, 2, 3, 4]");
 
             IEnumerable<JsonElement?> t = a.SelectElements("[1,2,0]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(3, t.Count());
-            Assert.Equal(2, t.ElementAt(0).Value.GetInt32());
-            Assert.Equal(3, t.ElementAt(1).Value.GetInt32());
-            Assert.Equal(1, t.ElementAt(2).Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(3, t.Count());
+            Assert.AreEqual(2, t.ElementAt(0).Value.GetInt32());
+            Assert.AreEqual(3, t.ElementAt(1).Value.GetInt32());
+            Assert.AreEqual(1, t.ElementAt(2).Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateScan()
         {
             JsonDocument o1 = JsonDocument.Parse(@"{ ""Name"": 1 }");
@@ -791,13 +789,13 @@ namespace JDocument.Test
             var a = JsonDocument.Parse(@"[{ ""Name"": 1 }, { ""Name"": 2 }]");
 
             var t = a.SelectElements("$..Name").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(2, t.Count);
-            Assert.Equal(1, t[0].Value.GetInt32());
-            Assert.Equal(2, t[1].Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(2, t.Count);
+            Assert.AreEqual(1, t[0].Value.GetInt32());
+            Assert.AreEqual(2, t[1].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateWildcardScan()
         {
             JsonDocument o1 = JsonDocument.Parse(@"{ ""Name"": 1 }");
@@ -805,16 +803,16 @@ namespace JDocument.Test
             var a = JsonDocument.Parse(@"[{ ""Name"": 1 }, { ""Name"": 2 }]");
 
             var t = a.SelectElements("$..*").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(5, t.Count);
-            Assert.True(a.DeepEquals(t[0].Value));
-            Assert.True(o1.DeepEquals(t[1].Value));
-            Assert.Equal(1, t[2].Value.GetInt32());
-            Assert.True(o2.DeepEquals(t[3].Value));
-            Assert.Equal(2, t[4].Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(5, t.Count);
+            Assert.IsTrue(a.DeepEquals(t[0].Value));
+            Assert.IsTrue(o1.DeepEquals(t[1].Value));
+            Assert.AreEqual(1, t[2].Value.GetInt32());
+            Assert.IsTrue(o2.DeepEquals(t[3].Value));
+            Assert.AreEqual(2, t[4].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateScanNestResults()
         {
             JsonDocument o1 = JsonDocument.Parse(@"{ ""Name"": 1 }");
@@ -827,15 +825,15 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("$..Name").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(4, t.Count);
-            Assert.Equal(1, t[0].Value.GetInt32());
-            Assert.Equal(2, t[1].Value.GetInt32());
-            Assert.True(JsonDocument.Parse(@"{ ""Name"": [3] }").DeepEquals(t[2].Value));
-            Assert.True(JsonDocument.Parse("[3]").DeepEquals(t[3].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(4, t.Count);
+            Assert.AreEqual(1, t[0].Value.GetInt32());
+            Assert.AreEqual(2, t[1].Value.GetInt32());
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""Name"": [3] }").DeepEquals(t[2].Value));
+            Assert.IsTrue(JsonDocument.Parse("[3]").DeepEquals(t[3].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateWildcardScanNestResults()
         {
             JsonDocument o1 = JsonDocument.Parse(@"{ ""Name"": 1 }");
@@ -848,45 +846,45 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("$..*").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(9, t.Count);
+            Assert.IsNotNull(t);
+            Assert.AreEqual(9, t.Count);
 
-            Assert.True(a.DeepEquals(t[0].Value));
-            Assert.True(o1.DeepEquals(t[1].Value));
-            Assert.Equal(1, t[2].Value.GetInt32());
-            Assert.True(o2.DeepEquals(t[3]));
-            Assert.Equal(2, t[4].Value.GetInt32());
-            Assert.True(o3.DeepEquals(t[5]));
-            Assert.True(JsonDocument.Parse(@"{ ""Name"": [3] }").DeepEquals(t[6].Value));
-            Assert.True(JsonDocument.Parse("[3]").DeepEquals(t[7].Value));
-            Assert.Equal(3, t[8].Value.GetInt32());
-            Assert.True(JsonDocument.Parse("[3]").DeepEquals(t[7].Value));
+            Assert.IsTrue(a.DeepEquals(t[0].Value));
+            Assert.IsTrue(o1.DeepEquals(t[1].Value));
+            Assert.AreEqual(1, t[2].Value.GetInt32());
+            Assert.IsTrue(o2.DeepEquals(t[3]));
+            Assert.AreEqual(2, t[4].Value.GetInt32());
+            Assert.IsTrue(o3.DeepEquals(t[5]));
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""Name"": [3] }").DeepEquals(t[6].Value));
+            Assert.IsTrue(JsonDocument.Parse("[3]").DeepEquals(t[7].Value));
+            Assert.AreEqual(3, t[8].Value.GetInt32());
+            Assert.IsTrue(JsonDocument.Parse("[3]").DeepEquals(t[7].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateSinglePropertyReturningArray()
         {
             var o = JsonDocument.Parse(@"{ ""Blah"": [ 1, 2, 3 ] }");
 
             var t = o.SelectElement("Blah");
-            Assert.NotNull(t);
-            Assert.Equal(JsonValueKind.Array, t?.ValueKind);
+            Assert.IsNotNull(t);
+            Assert.AreEqual(JsonValueKind.Array, t?.ValueKind);
 
             t = o.SelectElement("Blah[2]");
-            Assert.Equal(JsonValueKind.Number, t?.ValueKind);
-            Assert.Equal(3, t?.GetInt32());
+            Assert.AreEqual(JsonValueKind.Number, t?.ValueKind);
+            Assert.AreEqual(3, t?.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void EvaluateLastSingleCharacterProperty()
         {
             JsonDocument o2 = JsonDocument.Parse(@"{""People"":[{""N"":""Jeff""}]}");
-            var a2 = o2.SelectElement("People[0].N").Value.GetString();
+            var a2 = o2.SelectElement("People[0].N")?.GetString();
 
-            Assert.Equal("Jeff", a2);
+            Assert.AreEqual("Jeff", a2);
         }
 
-        [Fact]
+        [TestMethod]
         public void ExistsQuery()
         {
             var a = JsonDocument.Parse(@"[
@@ -895,12 +893,12 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[ ?( @.hi ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(1, t.Count);
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": ""ho"" }").DeepEquals(t[0].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(1, t.Count);
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": ""ho"" }").DeepEquals(t[0].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void EqualsQuery()
         {
             var a = JsonDocument.Parse(@"[
@@ -909,12 +907,12 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[ ?( @.['hi'] == 'ha' ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(1, t.Count);
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": ""ha"" }").DeepEquals(t[0].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(1, t.Count);
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": ""ha"" }").DeepEquals(t[0].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void NotEqualsQuery()
         {
             var a = JsonDocument.Parse(@"[
@@ -923,24 +921,24 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[ ?( @..hi <> 'ha' ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(1, t.Count);
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": ""ho"" }").DeepEquals(t[0].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(1, t.Count);
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": ""ho"" }").DeepEquals(t[0].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void NoPathQuery()
         {
             var a = JsonDocument.Parse("[1, 2, 3]");
 
             var t = a.SelectElements("[ ?( @ > 1 ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(2, t.Count);
-            Assert.Equal(2, t[0].Value.GetInt32());
-            Assert.Equal(3, t[1].Value.GetInt32());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(2, t.Count);
+            Assert.AreEqual(2, t[0].Value.GetInt32());
+            Assert.AreEqual(3, t[1].Value.GetInt32());
         }
 
-        [Fact]
+        [TestMethod]
         public void MultipleQueries()
         {
             var a = JsonDocument.Parse("[1, 2, 3, 4, 5, 6, 7, 8, 9]");
@@ -949,11 +947,11 @@ namespace JDocument.Test
             // first query resolves array to ints
             // int has no children to query
             var t = a.SelectElements("[?(@ <> 1)][?(@ <> 4)][?(@ < 7)]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(0, t.Count);
+            Assert.IsNotNull(t);
+            Assert.AreEqual(0, t.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void GreaterQuery()
         {
             var a = JsonDocument.Parse(@"
@@ -964,13 +962,13 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[ ?( @.hi > 1 ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(2, t.Count);
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 2 }").DeepEquals(t[0].Value));
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 3 }").DeepEquals(t[1].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(2, t.Count);
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 2 }").DeepEquals(t[0].Value));
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 3 }").DeepEquals(t[1].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void LesserQuery_ValueFirst()
         {
             var a = JsonDocument.Parse(@"
@@ -981,13 +979,13 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[ ?( 1 < @.hi ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(2, t.Count);
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 2 }").DeepEquals(t[0].Value));
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 3 }").DeepEquals(t[1].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(2, t.Count);
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 2 }").DeepEquals(t[0].Value));
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 3 }").DeepEquals(t[1].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void GreaterOrEqualQuery()
         {
             var a = JsonDocument.Parse(@"
@@ -999,15 +997,15 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[ ?( @.hi >= 1 ) ]").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(4, t.Count);
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 1 }").DeepEquals(t[0].Value));
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 2 }").DeepEquals(t[1].Value));
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 2.0 }").DeepEquals(t[2].Value));
-            Assert.True(JsonDocument.Parse(@"{ ""hi"": 3 }").DeepEquals(t[3].Value));
+            Assert.IsNotNull(t);
+            Assert.AreEqual(4, t.Count);
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 1 }").DeepEquals(t[0].Value));
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 2 }").DeepEquals(t[1].Value));
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 2.0 }").DeepEquals(t[2].Value));
+            Assert.IsTrue(JsonDocument.Parse(@"{ ""hi"": 3 }").DeepEquals(t[3].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void NestedQuery()
         {
             var a = JsonDocument.Parse(@"
@@ -1027,13 +1025,13 @@ namespace JDocument.Test
             ]");
 
             var t = a.SelectElements("[?(@.cast[?(@.name=='Will Smith')])].name").ToList();
-            Assert.NotNull(t);
-            Assert.Equal(2, t.Count);
-            Assert.Equal("Bad Boys", t[0].Value.GetString());
-            Assert.Equal("Independence Day", t[1].Value.GetString());
+            Assert.IsNotNull(t);
+            Assert.AreEqual(2, t.Count);
+            Assert.AreEqual("Bad Boys", t[0].Value.GetString());
+            Assert.AreEqual("Independence Day", t[1].Value.GetString());
         }
 
-        [Fact]
+        [TestMethod]
         public void MultiplePaths()
         {
             var a = JsonDocument.Parse(@"[
@@ -1052,11 +1050,11 @@ namespace JDocument.Test
             ]");
 
             var results = a.SelectElements("[?(@.price > @.max_price)]").ToList();
-            Assert.Equal(1, results.Count);
-            Assert.True(a.RootElement[2].DeepEquals(results[0].Value));
+            Assert.AreEqual(1, results.Count);
+            Assert.IsTrue(a.RootElement[2].DeepEquals(results[0].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void Exists_True()
         {
             var a = JsonDocument.Parse(@"[
@@ -1075,13 +1073,13 @@ namespace JDocument.Test
             ]");
 
             var results = a.SelectElements("[?(true)]").ToList();
-            Assert.Equal(3, results.Count);
-            Assert.True(a.RootElement[0].DeepEquals(results[0].Value));
-            Assert.True(a.RootElement[1].DeepEquals(results[1].Value));
-            Assert.True(a.RootElement[2].DeepEquals(results[2].Value));
+            Assert.AreEqual(3, results.Count);
+            Assert.IsTrue(a.RootElement[0].DeepEquals(results[0].Value));
+            Assert.IsTrue(a.RootElement[1].DeepEquals(results[1].Value));
+            Assert.IsTrue(a.RootElement[2].DeepEquals(results[2].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void Exists_Null()
         {
             var a = JsonDocument.Parse(@"[
@@ -1100,13 +1098,13 @@ namespace JDocument.Test
             ]");
 
             var results = a.SelectElements("[?(true)]").ToList();
-            Assert.Equal(3, results.Count);
-            Assert.True(a.RootElement[0].DeepEquals(results[0].Value));
-            Assert.True(a.RootElement[1].DeepEquals(results[1].Value));
-            Assert.True(a.RootElement[2].DeepEquals(results[2].Value));
+            Assert.AreEqual(3, results.Count);
+            Assert.IsTrue(a.RootElement[0].DeepEquals(results[0].Value));
+            Assert.IsTrue(a.RootElement[1].DeepEquals(results[1].Value));
+            Assert.IsTrue(a.RootElement[2].DeepEquals(results[2].Value));
         }
 
-        [Fact]
+        [TestMethod]
         public void WildcardWithProperty()
         {
             var o = JsonDocument.Parse(@"{
@@ -1143,16 +1141,16 @@ namespace JDocument.Test
 
             var tokens = o.SelectElements("$..*[?(@.text)]").ToList();
             int i = 0;
-            Assert.Equal("Sort system", tokens[i++].Value.GetProperty("text").GetString());
-            Assert.Equal("TSP-1", tokens[i++].Value.GetProperty("text").GetString());
-            Assert.Equal("Passenger 15", tokens[i++].Value.GetProperty("text").GetString());
-            Assert.Equal("Yard 11", tokens[i++].Value.GetProperty("text").GetString());
-            Assert.Equal("Sort yard 12", tokens[i++].Value.GetProperty("text").GetString());
-            Assert.Equal("Yard 13", tokens[i++].Value.GetProperty("text").GetString());
-            Assert.Equal(6, tokens.Count);
+            Assert.AreEqual("Sort system", tokens[i++].Value.GetProperty("text").GetString());
+            Assert.AreEqual("TSP-1", tokens[i++].Value.GetProperty("text").GetString());
+            Assert.AreEqual("Passenger 15", tokens[i++].Value.GetProperty("text").GetString());
+            Assert.AreEqual("Yard 11", tokens[i++].Value.GetProperty("text").GetString());
+            Assert.AreEqual("Sort yard 12", tokens[i++].Value.GetProperty("text").GetString());
+            Assert.AreEqual("Yard 13", tokens[i++].Value.GetProperty("text").GetString());
+            Assert.AreEqual(6, tokens.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void QueryAgainstNonStringValues()
         {
             IList<object> values = new List<object>
@@ -1180,21 +1178,21 @@ namespace JDocument.Test
             var o = JsonDocument.Parse(json);
 
             var t = o.SelectElements("$.prop[?(@.childProp =='ff2dc672-6e15-4aa2-afb0-18f4f69596ad')]").ToList();
-            Assert.Equal(2, t.Count);
+            Assert.AreEqual(2, t.Count);
 
             t = o.SelectElements("$.prop[?(@.childProp =='http://localhost')]").ToList();
-            Assert.Equal(2, t.Count);
+            Assert.AreEqual(2, t.Count);
 
             t = o.SelectElements("$.prop[?(@.childProp =='2000-12-05T05:07:59Z')]").ToList();
-            Assert.Equal(2, t.Count);
+            Assert.AreEqual(2, t.Count);
 
 #if !NET20
             t = o.SelectElements("$.prop[?(@.childProp =='2000-12-05T05:07:59-10:00')]").ToList();
-            Assert.Equal(2, t.Count);
+            Assert.AreEqual(2, t.Count);
 #endif
 
             t = o.SelectElements("$.prop[?(@.childProp =='SGVsbG8gd29ybGQ=')]").ToList();
-            Assert.Equal(2, t.Count);
+            Assert.AreEqual(2, t.Count);
 
             t = o.SelectElements("$.prop[?(@.childProp =='365.23:59:59')]").ToList();
 
@@ -1203,14 +1201,14 @@ namespace JDocument.Test
              */
 #if NET6_0
             
-            Assert.Equal(2, t.Count);
+            Assert.AreEqual(2, t.Count);
 #else
-            Assert.Equal(1, t.Count);
+            Assert.AreEqual(1, t.Count);
 #endif
 
         }
 
-        [Fact]
+        [TestMethod]
         public void Example()
         {
             var o = JsonDocument.Parse(@"{
@@ -1253,9 +1251,9 @@ namespace JDocument.Test
             string? productName = o.SelectElement("Manufacturers[1].Products[0].Name").Value.GetString();
             // Elbow Grease
 
-            Assert.Equal("Acme Co", name);
-            Assert.Equal(50m, productPrice);
-            Assert.Equal("Elbow Grease", productName);
+            Assert.AreEqual("Acme Co", name);
+            Assert.AreEqual(50m, productPrice);
+            Assert.AreEqual("Elbow Grease", productName);
 
             IList<string> storeNames = o.SelectElement("Stores")!.Value.EnumerateArray().Select(s => s.GetString()).ToList();
             // Lambton Quay
@@ -1270,16 +1268,16 @@ namespace JDocument.Test
                 0M, (sum, m) => sum + m.SelectElement("Products[0].Price").Value.GetDecimal());
             // 149.95
 
-            Assert.Equal(2, storeNames.Count);
-            Assert.Equal("Lambton Quay", storeNames[0]);
-            Assert.Equal("Willis Street", storeNames[1]);
-            Assert.Equal(2, firstProductNames.Count);
-            Assert.Equal(null, firstProductNames[0]);
-            Assert.Equal("Headlight Fluid", firstProductNames[1]);
-            Assert.Equal(149.95m, totalPrice);
+            Assert.AreEqual(2, storeNames.Count);
+            Assert.AreEqual("Lambton Quay", storeNames[0]);
+            Assert.AreEqual("Willis Street", storeNames[1]);
+            Assert.AreEqual(2, firstProductNames.Count);
+            Assert.AreEqual(null, firstProductNames[0]);
+            Assert.AreEqual("Headlight Fluid", firstProductNames[1]);
+            Assert.AreEqual(149.95m, totalPrice);
         }
 
-        [Fact]
+        [TestMethod]
         public void NotEqualsAndNonPrimativeValues()
         {
             string json = @"[
@@ -1311,22 +1309,22 @@ namespace JDocument.Test
             var a = JsonDocument.Parse(json);
 
             var result = a.SelectElements("$.[?(@.value!=1)]").ToList();
-            Assert.Equal(4, result.Count);
+            Assert.AreEqual(4, result.Count);
 
             result = a.SelectElements("$.[?(@.value!='2000-12-05T05:07:59-10:00')]").ToList();
-            Assert.Equal(4, result.Count);
+            Assert.AreEqual(4, result.Count);
 
             result = a.SelectElements("$.[?(@.value!=null)]").ToList();
-            Assert.Equal(4, result.Count);
+            Assert.AreEqual(4, result.Count);
 
             result = a.SelectElements("$.[?(@.value!=123)]").ToList();
-            Assert.Equal(3, result.Count);
+            Assert.AreEqual(3, result.Count);
 
             result = a.SelectElements("$.[?(@.value)]").ToList();
-            Assert.Equal(4, result.Count);
+            Assert.AreEqual(4, result.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void RootInFilter()
         {
             string json = @"[
@@ -1372,13 +1370,13 @@ namespace JDocument.Test
             var a = JsonDocument.Parse(json);
 
             var result = a.SelectElements("$.[?($.[0].store.bicycle.price < 20)]").ToList();
-            Assert.Equal(1, result.Count);
+            Assert.AreEqual(1, result.Count);
 
             result = a.SelectElements("$.[?($.[0].store.bicycle.price < 10)]").ToList();
-            Assert.Equal(0, result.Count);
+            Assert.AreEqual(0, result.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void RootInFilterWithRootObject()
         {
             string json = @"{
@@ -1424,14 +1422,14 @@ namespace JDocument.Test
             JsonDocument a = JsonDocument.Parse(json);
 
             var result = a.SelectElements("$..book[?(@.price <= $['expensive'])]").ToList();
-            Assert.Equal(2, result.Count);
+            Assert.AreEqual(2, result.Count);
 
             result = a.SelectElements("$.store..[?(@.price > $.expensive)]").ToList();
-            Assert.Equal(3, result.Count);
+            Assert.AreEqual(3, result.Count);
         }
 
         public const string IsoDateFormat = "yyyy-MM-ddTHH:mm:ss.FFFFFFFK";
-        [Fact]
+        [TestMethod]
         public void RootInFilterWithInitializers()
         {
             var minDate = DateTime.MinValue.ToString(IsoDateFormat);
@@ -1448,7 +1446,7 @@ namespace JDocument.Test
             }");
 
             var result = rootObject.SelectElements("$.dateObjectsArray[?(@.date == $.referenceDate)]").ToList();
-            Assert.Equal(2, result.Count);
+            Assert.AreEqual(2, result.Count);
         }
     }
 }

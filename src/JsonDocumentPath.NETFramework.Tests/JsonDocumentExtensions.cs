@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace JDocument.Test
+namespace JsonDocumentPath.NETFramework.Tests
 {
     public static class JsonDocumentExtensions
     {

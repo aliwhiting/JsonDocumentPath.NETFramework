@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Xunit;
 
-namespace JDocument.Test
+namespace JsonDocumentPath.NETFramework.Tests.Asserts
 {
     public static class StringAssert
     {
@@ -12,7 +11,7 @@ namespace JDocument.Test
             expected = Normalize(expected);
             actual = Normalize(actual);
 
-            Assert.Equal(expected, actual);
+            Assert.AreEqual(expected, actual);
         }
 
         public static bool Equals(string s1, string s2)

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace System.Text.Json
+namespace JsonDocumentPath.NETFramework
 {
     internal enum QueryOperator
     {

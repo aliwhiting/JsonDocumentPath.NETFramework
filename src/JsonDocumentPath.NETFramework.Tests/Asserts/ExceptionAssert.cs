@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-
-namespace JDocument.Test
+﻿namespace JsonDocumentPath.NETFramework.Tests.Asserts
 {
     public static class ExceptionAssert
     {

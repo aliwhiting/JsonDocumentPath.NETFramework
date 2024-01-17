@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 
-namespace System.Text.Json
+namespace JsonDocumentPath.NETFramework
 {
     public static class JsonDocumentPathExtensions
     {
@@ -8,7 +9,7 @@ namespace System.Text.Json
         /// Selects a collection of elements using a JSONPath expression.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="JsonDocument"/> that contains the selected elements.</returns>
 
@@ -21,7 +22,7 @@ namespace System.Text.Json
         /// Selects a collection of elements using a JSONPath expression.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="JsonElement"/> that contains the selected elements.</returns>
 
@@ -34,7 +35,7 @@ namespace System.Text.Json
         /// Selects a collection of elements using a JSONPath expression.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <param name="errorWhenNoMatch">A flag to indicate whether an error should be thrown if no tokens are found when evaluating part of the expression.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="JsonElement"/> that contains the selected elements.</returns>
@@ -48,7 +49,7 @@ namespace System.Text.Json
         /// Selects a collection of elements using a JSONPath expression.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <param name="errorWhenNoMatch">A flag to indicate whether an error should be thrown if no tokens are found when evaluating part of the expression.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="JsonDocument"/> that contains the selected elements.</returns>
@@ -62,7 +63,7 @@ namespace System.Text.Json
         /// Selects a <see cref="JsonElement"/> using a JSONPath expression. Selects the token that matches the object path.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <returns>A <see cref="JsonDocument"/>, or <c>null</c>.</returns>
         public static JsonElement? SelectElement(this JsonDocument src, string path)
@@ -74,7 +75,7 @@ namespace System.Text.Json
         /// Selects a <see cref="JsonElement"/> using a JSONPath expression. Selects the token that matches the object path.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <returns>A <see cref="JsonElement"/>, or <c>null</c>.</returns>
         public static JsonElement? SelectElement(this JsonElement src, string path)
@@ -86,7 +87,7 @@ namespace System.Text.Json
         /// Selects a <see cref="JsonElement"/> using a JSONPath expression. Selects the token that matches the object path.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <param name="errorWhenNoMatch">A flag to indicate whether an error should be thrown if no tokens are found when evaluating part of the expression.</param>
         /// <returns>A <see cref="JsonDocument"/>.</returns>
@@ -109,7 +110,7 @@ namespace System.Text.Json
         /// Selects a <see cref="JsonElement"/> using a JSONPath expression. Selects the token that matches the object path.
         /// </summary>
         /// <param name="path">
-        /// A <see cref="String"/> that contains a JSONPath expression.
+        /// A <see cref="string"/> that contains a JSONPath expression.
         /// </param>
         /// <param name="errorWhenNoMatch">A flag to indicate whether an error should be thrown if no tokens are found when evaluating part of the expression.</param>
         /// <returns>A <see cref="JsonElement"/>.</returns>
